@@ -17,25 +17,37 @@ users = [
         "id": 1,
         "username": "lisa",
         "password": "lisa",
-        "email": "lisa@test.com"
+        "email": "lisa@test.com",
+        "avatar": "/static/default.jpg",
+        "about_me": "I am lisa",
+        "last_seen": "2024-08-16 02:28:30"
     },
     {
         "id": 2,
         "username": "frank",
         "password": "frank",
-        "email": "frank@test.com"
+        "email": "frank@test.com",
+        "avatar": "/static/default.jpg",
+        "about_me": "I am lisa",
+        "last_seen": "2024-08-16 02:28:30"
     },
     {
         "id": 3,
         "username": "raj",
         "password": "raj",
-        "email": "raj@test.com"
+        "email": "raj@test.com",
+        "avatar": "/static/default.jpg",
+        "about_me": "I am lisa",
+        "last_seen": "2024-08-22 02:28:30"
     },
     {
         "id": 4,
         "username": "pri",
         "password": "pri",
-        "email": "pri@test.com"
+        "email": "pri@test.com",
+        "avatar": "/static/default.jpg",
+        "about_me": "I am lisa",
+        "last_seen": "2024-08-23 02:28:30"
     }
 ]
 posts = get_posts()
