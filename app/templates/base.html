@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+
+<head>
+    {% if title %}
+    <title>{{title}} - Blog</title>
+    {% else %}
+    <title>Welcome to the Blog</title>
+    {% endif %}
+</head>
+
+<body>
+    <div>
+        Microblog: 
+        <a href='{{url_for("index")}}'>Home</a>
+        {% if session.get('loggedInUser') %}
+            <a href='{{url_for("user", username=session["loggedInUser"].username)}}'>Profile</a>
+            <a href='{{url_for("logout")}}'>Logout</a>
+        {% else %}
+            <a href='{{url_for("login")}}'>Login</a>
+        {% endif %}
+    </div>
+    <hr/>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {%for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    <!-- block control statement to define the place where the derived templates can insert themselves -->
+</body>
+
+</html>

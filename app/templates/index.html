@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+<!-- The extends statement establishes the inheritance link between the two templates, so that Jinja knows that when it is asked to render index.html it needs to embed it inside base.html. -->
+
+<!-- The two templates have matching block statements with name content, and this is how Jinja knows how to combine the two templates into one. -->
+{% block content %}
+    <h1>Hello, {{ session["loggedInUser"].username }}!</h1>
+    {% for post in posts %}
+    <div>
+        <p>
+            {{post.author.username}} says:
+            <b>{{post.body}}</b>
+        </p>
+    </div>
+    {% endfor %}
+{% endblock %}
