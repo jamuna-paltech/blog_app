@@ -2,13 +2,13 @@ from shutil import Error
 from urllib.parse import urlsplit
 from app import app, users
 from flask import render_template, flash, redirect, request, session, url_for
-from app.forms import LoginForm, RegistrationForm
+from app.forms import EditProfileForm, LoginForm, RegistrationForm
 from datetime import datetime, timezone
 
-@app.before_request
-def before_request():
-    if session.get("loggedInUser"):
-        session["loggedInUser"].last_seen = datetime.now(timezone.utc)
+# @app.before_request
+# def before_request():
+#     if session.get("loggedInUser"):
+#         session["loggedInUser"].last_seen = datetime.now(timezone.utc)
 
 @app.route("/")
 @app.route("/index")
@@ -83,5 +83,21 @@ def user(username):
         {'author': user, 'body': 'Test post #2'}
     ]
     return render_template('user.html', user=user, posts=posts)
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if not session.get('loggedInUser'):
+        return redirect(url_for("login"))
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        session["loggedInUser"].username = form.username.data
+        session["loggedInUser"].about_me = form.about_me.data
+        flash('Your changes have been saved.')
+        return redirect(url_for('edit_profile'))
+    elif request.method == 'GET':
+        form.username.data = session["loggedInUser"]["username"] or 'default'
+        form.about_me.data = session["loggedInUser"]["about_me"] or ''
+    return render_template('edit_profile.html', title='Edit Profile',
+                           form=form)
 
 
