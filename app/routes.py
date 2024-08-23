@@ -3,6 +3,12 @@ from urllib.parse import urlsplit
 from app import app, users
 from flask import render_template, flash, redirect, request, session, url_for
 from app.forms import LoginForm, RegistrationForm
+from datetime import datetime, timezone
+
+@app.before_request
+def before_request():
+    if session.get("loggedInUser"):
+        session["loggedInUser"].last_seen = datetime.now(timezone.utc)
 
 @app.route("/")
 @app.route("/index")

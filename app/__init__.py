@@ -28,7 +28,7 @@ users = [
         "password": "frank",
         "email": "frank@test.com",
         "avatar": "/static/default.jpg",
-        "about_me": "I am lisa",
+        "about_me": "I am frank",
         "last_seen": "2024-08-16 02:28:30"
     },
     {
@@ -37,7 +37,7 @@ users = [
         "password": "raj",
         "email": "raj@test.com",
         "avatar": "/static/default.jpg",
-        "about_me": "I am lisa",
+        "about_me": "I am raj",
         "last_seen": "2024-08-22 02:28:30"
     },
     {
@@ -46,7 +46,7 @@ users = [
         "password": "pri",
         "email": "pri@test.com",
         "avatar": "/static/default.jpg",
-        "about_me": "I am lisa",
+        "about_me": "I am pri",
         "last_seen": "2024-08-23 02:28:30"
     }
 ]
