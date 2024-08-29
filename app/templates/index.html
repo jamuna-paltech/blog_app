@@ -3,7 +3,7 @@
 
 <!-- The two templates have matching block statements with name content, and this is how Jinja knows how to combine the two templates into one. -->
 {% block content %}
-    <h1>Hello, {{ session["loggedInUser"].username }}!</h1>
+    <h1>Hello, {{ current_user.username }}!</h1>
     {% for post in posts %}
         {% include "_post.html" %}
     {% endfor %}
