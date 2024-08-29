@@ -20,7 +20,8 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = db.session.scalars(sa.select(User).where(User.username==username.data))
+        print(username.data)
+        user = db.session.scalar(sa.select(User).where(User.username==username.data))
         if user is not None:
             raise ValidationError('Please use a different username.')
 
