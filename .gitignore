@@ -1,4 +1,4 @@
 .flaskenv
 __pycache__
 app.db
-microblog.log*
+blog_app.log*

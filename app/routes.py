@@ -1,12 +1,13 @@
 from shutil import Error
 from urllib.parse import urlsplit
 from flask_login import current_user, login_required, login_user, logout_user
-from app import app, db
-from flask import render_template, flash, redirect, request, url_for
+from app import app, db, auth
+from flask import render_template, flash, redirect, request, session, url_for
 from app.forms import EditProfileForm, LoginForm, RegistrationForm
 from datetime import datetime, timezone
 import sqlalchemy as sa
 from app.models import User
+from config import Config
 
 @app.before_request
 def before_request():
@@ -18,10 +19,11 @@ def before_request():
 @app.route("/index")
 @login_required
 def index():
-    posts = [
-        {"author": {"username": "Kenel"}, "body": "post 1"},
-        {"author": {"username": "Pankaj"}, "body": "post 2"},
-    ]
+    # posts = [
+    #     {"author": {"username": "Kenel"}, "body": "post 1"},
+    #     {"author": {"username": "Pankaj"}, "body": "post 2"},
+    # ]
+    posts = db.session.scalars(current_user.get_all_posts())
     return render_template("index.html", title="Home", posts=posts)
 
 
@@ -42,11 +44,16 @@ def login():
             # the application only redirects when the URL is relative, which ensures that the redirect stays within the same site as the application. To determine if the URL is absolute or relative, I parse it with Python's urlsplit() function and then check if the netloc component is set or not.
             next_page = url_for("index")
         return redirect(next_page)
-    return render_template("login.html", title="Sign In", form=form)
+    return render_template("login.html", title="Sign In", form=form, **auth.log_in(
+        scopes=Config.SCOPE, # Have user consent to scopes during log-in
+        redirect_uri=url_for("auth_response", _external=True)
+    ))
 
 
 @app.route("/logout")
 def logout():
+    if session.get("access_token"):
+        return redirect(auth.log_out(url_for("index", _external=True)))
     logout_user()
     return redirect(url_for("index"))
 
@@ -71,10 +78,7 @@ def register():
 @login_required
 def user(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
-    posts = [
-        {"author": user, "body": "Test post #1"},
-        {"author": user, "body": "Test post #2"},
-    ]
+    posts = db.session.scalars(current_user.get_posts())
     return render_template("user.html", user=user, posts=posts)
 
 
@@ -92,3 +96,10 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template("edit_profile.html", title="Edit Profile", form=form)
+
+@app.route(Config.REDIRECT_PATH)
+def auth_response():
+    result = auth.complete_log_in(request.args)
+    if "error" in result:
+        return render_template("500.html")
+    return redirect(url_for("index"))

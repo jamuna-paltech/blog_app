@@ -29,7 +29,13 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def avatar(self):
-        return url_for("static", filename="default.jpg")
+        return url_for("static", filename="default.png")
+    
+    def get_all_posts(self):
+        return sa.select(Post).order_by(Post.timestamp.desc())
+    
+    def get_posts(self):
+        return sa.select(Post).where(Post.user_id == self.id).order_by(Post.timestamp.desc())
 
 
 class Post(db.Model):

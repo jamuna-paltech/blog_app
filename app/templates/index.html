@@ -5,6 +5,7 @@
 {% block content %}
     <h1>Hello, {{ current_user.username }}!</h1>
     {% for post in posts %}
-              <p>{{ post.author.username }} says:<br>{{ post.body }}</p>
+            {% include "_post.html" %}
+              <!-- <p>{{ post.author.username }} says:<br>{{ post.body }}</p> -->
     {% endfor %}
 {% endblock %}
