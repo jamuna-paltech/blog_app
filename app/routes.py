@@ -2,7 +2,7 @@ from shutil import Error
 from urllib.parse import urlsplit
 from flask_login import current_user, login_required, login_user, logout_user
 from app import app, db
-from flask import render_template, flash, redirect, request, session, url_for
+from flask import render_template, flash, redirect, request, url_for
 from app.forms import EditProfileForm, LoginForm, RegistrationForm
 from datetime import datetime, timezone
 import sqlalchemy as sa
@@ -18,8 +18,6 @@ def before_request():
 @app.route("/index")
 @login_required
 def index():
-    if not session.get("loggedInUser"):
-        return redirect(url_for("login"))
     posts = [
         {"author": {"username": "Kenel"}, "body": "post 1"},
         {"author": {"username": "Pankaj"}, "body": "post 2"},
@@ -83,7 +81,7 @@ def user(username):
 @app.route("/edit_profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data

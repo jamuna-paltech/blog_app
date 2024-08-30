@@ -1,0 +1,133 @@
+/* Global Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0.25em;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    color: #444;
+  }
+  
+  h1 {
+    font-size: 36px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #337ab7;
+  }
+  
+  a:hover {
+    color: #23527c;
+  }
+  
+  /* Header Styles */
+  
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+  }
+  
+  header h1 {
+    font-size: 24px;
+    margin-bottom: 0.5em;
+  }
+  
+  /* Main Content Styles */
+  
+  main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+  }
+  
+  main h1 {
+    font-size: 36px;
+    margin-bottom: 0.5em;
+  }
+  
+  main p {
+    margin-bottom: 1em;
+  }
+  
+  /* Footer Styles */
+  
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+    clear: both;
+  }
+  
+  footer p {
+    margin-bottom: 0.5em;
+  }
+  
+  /* Login and Register Styles */
+  
+  .login-register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 300px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-register h1 {
+    font-size: 24px;
+    margin-bottom: 0.5em;
+  }
+  
+  .login-register form {
+    margin-top: 1em;
+  }
+  
+  .login-register label {
+    display: flex;
+}
+  
+  .login-register input[type="text"], .login-register input[type="password"] {
+    width: 100%;
+    /* height: 40px; */
+    margin-bottom: 1em;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+  }
+  
+  .login-register input[type="submit"] {
+    width: 100%;
+    height: 40px;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .login-register input[type="submit"]:hover {
+    background-color: #23527c;
+  }
