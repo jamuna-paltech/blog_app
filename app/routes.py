@@ -100,6 +100,15 @@ def edit_profile():
 @app.route(Config.REDIRECT_PATH)
 def auth_response():
     result = auth.complete_log_in(request.args)
+    print("result",result,loggedInUser)
+    loggedInUser = db.session.scalar(sa.select(User).where(User.username == result.get("preferred_username")))
+    if loggedInUser:
+        login_user(loggedInUser, remember=False)
+    else:
+        user = User(username=result.get("preferred_username"), email=result.get("preferred_username"))
+        db.session.add(user)
+        db.session.commit()
+        login_user(user, remember=False)
     if "error" in result:
         return render_template("500.html")
     return redirect(url_for("index"))

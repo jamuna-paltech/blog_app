@@ -30,7 +30,14 @@
         <p style="display: flex; flex-direction: row; gap: 0.25em;">{{ form.remember_me() }} {{ form.remember_me.label }}</p>
         <p>{{ form.submit() }}</p>
     </form>
-    <br/>
+    <div class="msal-login">
+        <div class="or-divider">
+            <hr>
+            <span>OR</span>
+            <hr>
+        </div>
+        <button><a href='{{ auth_uri }}' style="color: #000; text-decoration: none;" >Sign In With Microsoft</a></button>
+    </div>
     <p>
         New User?
         <a href="{{ url_for('register') }}">

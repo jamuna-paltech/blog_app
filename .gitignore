@@ -2,3 +2,4 @@
 __pycache__
 app.db
 blog_app.log*
+flask_session/
