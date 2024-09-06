@@ -3,10 +3,10 @@ from urllib.parse import urlsplit
 from flask_login import current_user, login_required, login_user, logout_user
 from app import app, db, auth
 from flask import render_template, flash, redirect, request, session, url_for
-from app.forms import EditProfileForm, LoginForm, RegistrationForm
+from app.forms import EditProfileForm, LoginForm, NewPostForm, RegistrationForm
 from datetime import datetime, timezone
 import sqlalchemy as sa
-from app.models import User
+from app.models import Post, User
 from config import Config
 
 @app.before_request
@@ -15,16 +15,23 @@ def before_request():
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
 
-@app.route("/")
-@app.route("/index")
+@app.route("/", methods=["GET", "POST"])
+@app.route("/index", methods=["GET", "POST"])
 @login_required
 def index():
+    form = NewPostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is now live!')
+        return redirect(url_for('index'))
     # posts = [
     #     {"author": {"username": "Kenel"}, "body": "post 1"},
     #     {"author": {"username": "Pankaj"}, "body": "post 2"},
     # ]
     posts = db.session.scalars(current_user.get_all_posts())
-    return render_template("index.html", title="Home", posts=posts)
+    return render_template("index.html", title="Home", posts=posts, form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -44,10 +51,12 @@ def login():
             # the application only redirects when the URL is relative, which ensures that the redirect stays within the same site as the application. To determine if the URL is absolute or relative, I parse it with Python's urlsplit() function and then check if the netloc component is set or not.
             next_page = url_for("index")
         return redirect(next_page)
-    return render_template("login.html", title="Sign In", form=form, **auth.log_in(
+    temp = auth.log_in(
         scopes=Config.SCOPE, # Have user consent to scopes during log-in
         redirect_uri=url_for("auth_response", _external=True)
-    ))
+    )
+    print("temp", temp)
+    return render_template("login.html", title="Sign In", form=form, **temp)
 
 
 @app.route("/logout")
@@ -100,15 +109,13 @@ def edit_profile():
 @app.route(Config.REDIRECT_PATH)
 def auth_response():
     result = auth.complete_log_in(request.args)
-    print("result",result,loggedInUser)
+    print("result",result)
     loggedInUser = db.session.scalar(sa.select(User).where(User.username == result.get("preferred_username")))
-    if loggedInUser:
-        login_user(loggedInUser, remember=False)
-    else:
-        user = User(username=result.get("preferred_username"), email=result.get("preferred_username"))
+    if not loggedInUser:
+        loggedInUser = User(username=result.get("preferred_username"), email=result.get("preferred_username"))
         db.session.add(user)
         db.session.commit()
-        login_user(user, remember=False)
+    login_user(loggedInUser, remember=False)
     if "error" in result:
         return render_template("500.html")
     return redirect(url_for("index"))
